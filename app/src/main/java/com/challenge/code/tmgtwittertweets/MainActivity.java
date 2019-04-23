@@ -1,5 +1,6 @@
 package com.challenge.code.tmgtwittertweets;
 
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
@@ -14,19 +15,24 @@ import android.widget.ImageButton;
 import android.widget.Toast;
 
 import com.challenge.code.tmgtwittertweets.adapter.TweetAdapter;
+import com.challenge.code.tmgtwittertweets.connectivity.ConnectionModel;
+import com.challenge.code.tmgtwittertweets.connectivity.ConnectivityLiveData;
 import com.challenge.code.tmgtwittertweets.network.response.Tweet;
 import com.challenge.code.tmgtwittertweets.viewmodel.TwitterViewModel;
+import com.google.android.material.snackbar.Snackbar;
 
 import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
     private TwitterViewModel mTwitterViewModel;
     TweetAdapter mAdapter;
+    private Snackbar mNetworkSnackbar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        bindToNetwork();
         bindToTwitterViewModel();
         setupRecyclerView();
         ImageButton button = findViewById(R.id.btnSearch);
@@ -62,6 +68,29 @@ public class MainActivity extends AppCompatActivity {
                         Toast.makeText(MainActivity.this, tweets.size() + " Received", Toast.LENGTH_LONG).show();
                     }else{
 
+                    }
+                }
+            }
+        });
+    }
+
+    private void bindToNetwork() {
+        final ConnectivityLiveData connectionLiveData = new ConnectivityLiveData(getApplicationContext());
+        connectionLiveData.observe(this, new Observer<ConnectionModel>() {
+            @Override
+            public void onChanged(@Nullable ConnectionModel connection) {
+                if (connection != null) {
+                    if (connection.getIsConnected()) {
+                        if (mNetworkSnackbar != null && mNetworkSnackbar.isShown()) {
+                            mNetworkSnackbar.dismiss();
+                            findViewById(R.id.btnSearch).setEnabled(true);
+                        }
+                    } else {
+                        if (mNetworkSnackbar == null) {
+                            mNetworkSnackbar = Snackbar.make(findViewById(R.id.layoutRoot), getString(R.string.no_network_available), Snackbar.LENGTH_INDEFINITE);
+                        }
+                        findViewById(R.id.btnSearch).setEnabled(false);
+                        mNetworkSnackbar.show();
                     }
                 }
             }

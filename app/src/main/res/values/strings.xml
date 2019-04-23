@@ -1,4 +1,5 @@
 <resources>
     <string name="app_name">TMG Twitter Tweets</string>
     <string name="enter_keyword">Enter Keyword</string>
+    <string name="no_network_available">No Network Available</string>
 </resources>
