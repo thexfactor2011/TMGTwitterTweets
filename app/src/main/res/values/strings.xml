@@ -2,4 +2,6 @@
     <string name="app_name">TMG Twitter Tweets</string>
     <string name="enter_keyword">Enter Keyword</string>
     <string name="no_network_available">No Network Available</string>
+    <string name="directions">Type in a Keywork and hit send to see some tweets</string>
+    <string name="empty_keyword_error">Keyword cannot be blank</string>
 </resources>
