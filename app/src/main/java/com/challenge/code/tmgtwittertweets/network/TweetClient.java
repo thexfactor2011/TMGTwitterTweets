@@ -22,7 +22,6 @@ public class TweetClient {
 
             OkHttpClient client = getHttpClient();
             Gson gson = new GsonBuilder()
-                    //.registerTypeAdapter(Date.class, new DateDeserializer())
                     .create();
             retrofit = new Retrofit.Builder()
                     .baseUrl(mBaseURL)
