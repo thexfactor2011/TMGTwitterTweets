@@ -3,10 +3,13 @@ package com.challenge.code.tmgtwittertweets;
 import android.app.Activity;
 import android.content.Context;
 import android.os.Bundle;
+import android.view.KeyEvent;
 import android.view.View;
+import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.ImageButton;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.Nullable;
@@ -42,8 +45,26 @@ public class MainActivity extends AppCompatActivity {
         //Handles the tweets that match the keyword.
         bindToTwitterViewModel();
 
-
         setupRecyclerView();
+
+        EditText editText = findViewById(R.id.editTextKeyword);
+        editText.setOnEditorActionListener(new TextView.OnEditorActionListener() {
+            @Override
+            public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
+                // Identifier of the action. This will be either the identifier you supplied,
+                // or EditorInfo.IME_NULL if being called due to the enter key being pressed.
+                if (actionId == EditorInfo.IME_ACTION_SEARCH
+                        || actionId == EditorInfo.IME_ACTION_DONE
+                        || event.getAction() == KeyEvent.ACTION_DOWN
+                        && event.getKeyCode() == KeyEvent.KEYCODE_ENTER) {
+                    ImageButton button = findViewById(R.id.btnSearch);
+                    button.performClick();
+                    return true;
+                }
+                // Return true if you have consumed the action, else false.
+                return false;
+            }
+        });
 
         //TODO: Use Databinding.
         ImageButton button = findViewById(R.id.btnSearch);
