@@ -2,8 +2,6 @@ package com.challenge.code.tmgtwittertweets.network;
 
 import com.challenge.code.tmgtwittertweets.network.response.SearchResponse;
 
-import java.util.List;
-
 import retrofit2.Call;
 import retrofit2.http.Field;
 import retrofit2.http.FormUrlEncoded;

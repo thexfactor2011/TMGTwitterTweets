@@ -1,5 +1,11 @@
 package com.challenge.code.tmgtwittertweets;
 
+import android.os.Bundle;
+import android.view.View;
+import android.widget.EditText;
+import android.widget.ImageButton;
+import android.widget.Toast;
+
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.Observer;
@@ -7,12 +13,6 @@ import androidx.lifecycle.ViewModelProviders;
 import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
-
-import android.os.Bundle;
-import android.view.View;
-import android.widget.EditText;
-import android.widget.ImageButton;
-import android.widget.Toast;
 
 import com.challenge.code.tmgtwittertweets.adapter.TweetAdapter;
 import com.challenge.code.tmgtwittertweets.connectivity.ConnectionModel;
