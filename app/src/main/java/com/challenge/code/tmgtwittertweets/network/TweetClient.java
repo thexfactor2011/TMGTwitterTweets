@@ -5,7 +5,7 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
 import okhttp3.OkHttpClient;
-import okhttp3.logging.HttpLoggingInterceptor;
+//import okhttp3.logging.HttpLoggingInterceptor;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
@@ -33,20 +33,19 @@ public class TweetClient {
         return retrofit;
     }
 
-    private static OkHttpClient getHttpClient(){
+    private static OkHttpClient getHttpClient() {
         OkHttpClient.Builder httpClient = new OkHttpClient.Builder();
 
-       // FOR DEBUGGING ONLY!
-            HttpLoggingInterceptor interceptor = new HttpLoggingInterceptor();
-            interceptor.setLevel(HttpLoggingInterceptor.Level.BODY);
-           httpClient
-                    .addInterceptor(interceptor).build();
+        // FOR DEBUGGING ONLY!
+//        HttpLoggingInterceptor interceptor = new HttpLoggingInterceptor();
+//        interceptor.setLevel(HttpLoggingInterceptor.Level.BODY);
+//        httpClient.addInterceptor(interceptor).build();
 
-        return  httpClient.build();
+        return httpClient.build();
     }
 
-    public static TwitterApiService getApiService(){
-        if(apiService == null){
+    public static TwitterApiService getApiService() {
+        if (apiService == null) {
             apiService = getClient().create(TwitterApiService.class);
         }
         return apiService;
