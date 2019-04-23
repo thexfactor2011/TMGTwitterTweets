@@ -31,6 +31,14 @@ public class TwitterViewModel extends AndroidViewModel implements TwitterReposit
         mObservableSearchResults = new MutableLiveData<>();
     }
 
+    public TwitterViewModel(TwitterRepository repository, @NonNull Application application){
+        super(application);
+        mRepository = repository;
+        mProcessing = new MutableLiveData<>();
+        mProcessing.setValue(false);
+        mObservableSearchResults = new MutableLiveData<>();
+    }
+
     //TODO: This would be a good case for a Transformation.
     public void SearchTwitter(String keyword){
         mProcessing.setValue(true);
