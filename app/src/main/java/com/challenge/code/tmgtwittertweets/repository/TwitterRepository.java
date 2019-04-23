@@ -33,13 +33,16 @@ public class TwitterRepository {
         mCallback = callback;
     }
 
-    //Testing constructor
+    //Testing constructor. I can pass in a MockRetrofit Service to pass back expected results.
     public TwitterRepository(TwitterApiService service, String authToken, RepositoryCallback callback){
         mApiService = service;
         mAuthToken = authToken;
         mCallback = callback;
     }
 
+
+    //We check the auth token to see if we have access, if we dont we get a new token and try again.
+    //
     public void searchTwitterByKeyword(String keyword){
         mKeyword = keyword;
         if(mAuthToken != null && !"".equals(mAuthToken)) {
@@ -57,6 +60,9 @@ public class TwitterRepository {
                     }else{
                         //Invalid response code.
                         //If 401 get new token.
+                        if(response.code() == 401){
+                            getApiToken();
+                        }
                     }
                 }
 
@@ -72,6 +78,8 @@ public class TwitterRepository {
         }
     }
 
+    //Uses API key and Secret to get a OAuth accessToken.
+    //We use the accessToken for all other requests
     private void getApiToken(){
         String key = mContext.getString(R.string.com_twitter_sdk_android_CONSUMER_KEY);
         String secret = mContext.getString(R.string.com_twitter_sdk_android_CONSUMER_SECRET);
@@ -97,6 +105,7 @@ public class TwitterRepository {
         });
     }
 
+    //Interface used to return the results of the Async Network calls.
     public interface RepositoryCallback{
         void onSearchResultReceived(List<Tweet> tweets);
 

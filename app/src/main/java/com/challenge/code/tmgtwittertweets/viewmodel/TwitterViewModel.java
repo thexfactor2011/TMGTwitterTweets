@@ -20,6 +20,10 @@ public class TwitterViewModel extends AndroidViewModel implements TwitterReposit
     private MutableLiveData<Boolean> mProcessing;
     private MutableLiveData<List<Tweet>> mObservableSearchResults;
 
+    /**
+     * This viewmodel si the sole source of hwo the views interact with the api.
+     * @param application
+     */
     public TwitterViewModel(@NonNull Application application) {
         super(application);
         mRepository = new TwitterRepository(application.getApplicationContext(), this);
@@ -28,6 +32,7 @@ public class TwitterViewModel extends AndroidViewModel implements TwitterReposit
         mObservableSearchResults = new MutableLiveData<>();
     }
 
+    //TODO: This would be a good case for a Transformation.
     public void SearchTwitter(String keyword){
         mProcessing.setValue(true);
         mRepository.searchTwitterByKeyword(keyword);
@@ -47,6 +52,7 @@ public class TwitterViewModel extends AndroidViewModel implements TwitterReposit
         mObservableSearchResults.setValue(response);
     }
 
+    //TODO: Return this to the Observer. Update to use NetowkBoundResources.
     @Override
     public void onSearchResultError(String error) {
         mProcessing.setValue(false);

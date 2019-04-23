@@ -1,7 +1,10 @@
 package com.challenge.code.tmgtwittertweets;
 
+import android.app.Activity;
+import android.content.Context;
 import android.os.Bundle;
 import android.view.View;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.Toast;
@@ -32,22 +35,42 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        //Track The network status. We cannot pull tweets without ti.
         bindToNetwork();
+
+        //Handles the tweets that match the keyword.
         bindToTwitterViewModel();
+
+
         setupRecyclerView();
+
+        //TODO: Use Databinding.
         ImageButton button = findViewById(R.id.btnSearch);
         button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(mTwitterViewModel != null){
-                    String keyword = ((EditText)findViewById(R.id.editTextKeyword)).getText().toString();
-                    mTwitterViewModel.SearchTwitter(keyword);
+                if (mTwitterViewModel != null) {
+                    EditText editText = ((EditText) findViewById(R.id.editTextKeyword));
+                    String keyword = editText.getText().toString();
+                    if ("".equals(keyword)){
+                        Toast.makeText(MainActivity.this, getString(R.string.empty_keyword_error), Toast.LENGTH_LONG).show();
+                    }else{
+                        mTwitterViewModel.SearchTwitter(keyword);
+                        hideKeyboard(MainActivity.this, editText);
+                    }
                 }
             }
         });
     }
 
+    /**
+     * I choose to use viewmodels because the data persists even after a screen rotation.
+     */
     private void bindToTwitterViewModel() {
+
+        //This is a status that we are making a request.
+        //TODO: Use Network Bound resource.
         mTwitterViewModel = ViewModelProviders.of(this).get(TwitterViewModel.class);
         mTwitterViewModel.getObservableProcessingStatus().observe(this, new Observer<Boolean>() {
             @Override
@@ -59,21 +82,30 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
+        //This updates the UI based on how many tweets we get from the API
         mTwitterViewModel.getObservableTweets().observe(this, new Observer<List<Tweet>>() {
             @Override
             public void onChanged(List<Tweet> tweets) {
-                if(tweets != null){
-                    if(tweets.size() > 0){
+                if (tweets != null) {
+                    if (tweets.size() > 0) {
+                        findViewById(R.id.recyclerView).setVisibility(View.VISIBLE);
+                        findViewById(R.id.noTweetsLayout).setVisibility(View.GONE);
                         mAdapter.setTweets(tweets);
-                        Toast.makeText(MainActivity.this, tweets.size() + " Received", Toast.LENGTH_LONG).show();
-                    }else{
-
+                        //Toast.makeText(MainActivity.this, tweets.size() + " Received", Toast.LENGTH_LONG).show();
+                    } else {
+                        findViewById(R.id.recyclerView).setVisibility(View.GONE);
+                        findViewById(R.id.noTweetsLayout).setVisibility(View.VISIBLE);
                     }
                 }
             }
         });
     }
 
+    /**
+     * We shouldnt let the user make a request when they have no network.
+     * This will lock the button and display a snackbar saying why they cant act.
+     * It will automatically update the UI once the network is restored.
+     */
     private void bindToNetwork() {
         final ConnectivityLiveData connectionLiveData = new ConnectivityLiveData(getApplicationContext());
         connectionLiveData.observe(this, new Observer<ConnectionModel>() {
@@ -97,7 +129,7 @@ public class MainActivity extends AppCompatActivity {
         });
     }
 
-    private void setupRecyclerView(){
+    private void setupRecyclerView() {
         mAdapter = new TweetAdapter(MainActivity.this);
         // use a linear layout manager
         LinearLayoutManager mLayoutManager = new LinearLayoutManager(MainActivity.this);
@@ -112,5 +144,12 @@ public class MainActivity extends AppCompatActivity {
         DividerItemDecoration dividerItemDecoration = new DividerItemDecoration(MainActivity.this,
                 mLayoutManager.getOrientation());
         recyclerView.addItemDecoration(dividerItemDecoration);
+    }
+
+    public void hideKeyboard(Activity activity, View view) {
+        if (activity != null && view != null) {
+            final InputMethodManager imm = (InputMethodManager) activity.getSystemService(Context.INPUT_METHOD_SERVICE);
+            imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
+        }
     }
 }
