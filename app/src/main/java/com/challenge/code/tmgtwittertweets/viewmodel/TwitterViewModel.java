@@ -7,8 +7,7 @@ import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 
-import com.challenge.code.tmgtwittertweets.network.response.SearchResponse;
-import com.challenge.code.tmgtwittertweets.network.response.Tweets;
+import com.challenge.code.tmgtwittertweets.network.response.Tweet;
 import com.challenge.code.tmgtwittertweets.repository.TwitterRepository;
 
 import java.util.List;
@@ -19,7 +18,7 @@ import java.util.List;
 public class TwitterViewModel extends AndroidViewModel implements TwitterRepository.RepositoryCallback {
     private TwitterRepository mRepository;
     private MutableLiveData<Boolean> mProcessing;
-    private MutableLiveData<List<Tweets>> mObservableSearchResults;
+    private MutableLiveData<List<Tweet>> mObservableSearchResults;
 
     public TwitterViewModel(@NonNull Application application) {
         super(application);
@@ -34,12 +33,16 @@ public class TwitterViewModel extends AndroidViewModel implements TwitterReposit
         mRepository.searchTwitterByKeyword(keyword);
     }
 
-    public LiveData<Boolean> getObservableProcssingStatus(){
+    public LiveData<Boolean> getObservableProcessingStatus(){
         return mProcessing;
     }
 
+    public LiveData<List<Tweet>> getObservableTweets(){
+        return mObservableSearchResults;
+    }
+
     @Override
-    public void onSearchResultReceived(List<Tweets> response) {
+    public void onSearchResultReceived(List<Tweet> response) {
         mProcessing.setValue(false);
         mObservableSearchResults.setValue(response);
     }

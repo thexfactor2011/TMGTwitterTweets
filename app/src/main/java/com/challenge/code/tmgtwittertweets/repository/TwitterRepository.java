@@ -8,7 +8,7 @@ import com.challenge.code.tmgtwittertweets.network.TweetClient;
 import com.challenge.code.tmgtwittertweets.network.TwitterApiService;
 import com.challenge.code.tmgtwittertweets.network.TwitterToken;
 import com.challenge.code.tmgtwittertweets.network.response.SearchResponse;
-import com.challenge.code.tmgtwittertweets.network.response.Tweets;
+import com.challenge.code.tmgtwittertweets.network.response.Tweet;
 
 import java.util.List;
 
@@ -75,6 +75,7 @@ public class TwitterRepository {
     private void getApiToken(){
         String key = mContext.getString(R.string.com_twitter_sdk_android_CONSUMER_KEY);
         String secret = mContext.getString(R.string.com_twitter_sdk_android_CONSUMER_SECRET);
+        //TODO: Check if these are valued, if not we need to display an error.
         byte[] bytes = (key +":"+secret).getBytes();
         String header = "Basic " + Base64.encodeToString(bytes, Base64.NO_WRAP);
 
@@ -97,7 +98,7 @@ public class TwitterRepository {
     }
 
     public interface RepositoryCallback{
-        void onSearchResultReceived(List<Tweets> tweets);
+        void onSearchResultReceived(List<Tweet> tweets);
 
         void onSearchResultError(String error);
     }

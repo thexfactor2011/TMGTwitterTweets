@@ -6,7 +6,7 @@ import com.google.gson.annotations.SerializedName;
 /**
  * Created by Harry Anuszewski on 4/22/2019.
  */
-public class Tweets {
+public class Tweet {
     @SerializedName("created_at")
     @Expose
     private String createdAt;
