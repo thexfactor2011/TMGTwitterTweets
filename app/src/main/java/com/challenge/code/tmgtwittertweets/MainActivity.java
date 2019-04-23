@@ -98,7 +98,7 @@ public class MainActivity extends AppCompatActivity {
             public void onChanged(Boolean aBoolean) {
                 if (aBoolean != null) {
                     if (aBoolean)
-                        Toast.makeText(MainActivity.this, "Fetching Tweet", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(MainActivity.this, getString(R.string.fetching_tweet), Toast.LENGTH_SHORT).show();
                 }
             }
         });
@@ -152,7 +152,7 @@ public class MainActivity extends AppCompatActivity {
 
     private void setupRecyclerView() {
         mAdapter = new TweetAdapter(MainActivity.this);
-        // use a linear layout manager
+        // use a linear layout manager since its a linear list.
         LinearLayoutManager mLayoutManager = new LinearLayoutManager(MainActivity.this);
         RecyclerView recyclerView = findViewById(R.id.recyclerView);
 
@@ -167,7 +167,7 @@ public class MainActivity extends AppCompatActivity {
         recyclerView.addItemDecoration(dividerItemDecoration);
     }
 
-    public void hideKeyboard(Activity activity, View view) {
+    private void hideKeyboard(Activity activity, View view) {
         if (activity != null && view != null) {
             final InputMethodManager imm = (InputMethodManager) activity.getSystemService(Context.INPUT_METHOD_SERVICE);
             imm.hideSoftInputFromWindow(view.getWindowToken(), 0);

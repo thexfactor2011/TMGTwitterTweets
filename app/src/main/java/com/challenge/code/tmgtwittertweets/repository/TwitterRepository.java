@@ -83,26 +83,35 @@ public class TwitterRepository {
     private void getApiToken(){
         String key = mContext.getString(R.string.com_twitter_sdk_android_CONSUMER_KEY);
         String secret = mContext.getString(R.string.com_twitter_sdk_android_CONSUMER_SECRET);
-        //TODO: Check if these are valued, if not we need to display an error.
-        byte[] bytes = (key +":"+secret).getBytes();
-        String header = "Basic " + Base64.encodeToString(bytes, Base64.NO_WRAP);
+        if(!"".equals(key)) {
+            if(!"".equals(secret)) {
+                byte[] bytes = (key + ":" + secret).getBytes();
+                String header = "Basic " + Base64.encodeToString(bytes, Base64.NO_WRAP);
 
-        TweetClient.getApiService().GetToken(header, "client_credentials").enqueue(new Callback<TwitterToken>() {
-            @Override
-            public void onResponse(Call<TwitterToken> call, Response<TwitterToken> response) {
-                String type = response.body().tokenType;
-                String token = response.body().accessToken;
-                mAuthToken = type + " " + token;
-                searchTwitterByKeyword(mKeyword);
-            }
+                TweetClient.getApiService().GetToken(header, "client_credentials").enqueue(new Callback<TwitterToken>() {
+                    @Override
+                    public void onResponse(Call<TwitterToken> call, Response<TwitterToken> response) {
+                        String type = response.body().tokenType;
+                        String token = response.body().accessToken;
+                        mAuthToken = type + " " + token;
+                        searchTwitterByKeyword(mKeyword);
+                    }
 
-            @Override
-            public void onFailure(Call<TwitterToken> call, Throwable t) {
-                if(mCallback != null){
-                    mCallback.onSearchResultError(t.getMessage());
-                }
+                    @Override
+                    public void onFailure(Call<TwitterToken> call, Throwable t) {
+                        if (mCallback != null) {
+                            mCallback.onSearchResultError(t.getMessage());
+                        }
+                    }
+                });
+            }else{
+                if(mCallback != null)
+                    mCallback.onSearchResultError("API Secret is null");
             }
-        });
+        }else{
+            if(mCallback != null)
+                mCallback.onSearchResultError("API Key is null");
+        }
     }
 
     //Interface used to return the results of the Async Network calls.

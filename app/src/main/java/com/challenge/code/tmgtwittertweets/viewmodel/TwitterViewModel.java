@@ -21,8 +21,7 @@ public class TwitterViewModel extends AndroidViewModel implements TwitterReposit
     private MutableLiveData<List<Tweet>> mObservableSearchResults;
 
     /**
-     * This viewmodel si the sole source of hwo the views interact with the api.
-     * @param application
+     * This viewmodel is the single source of how the views interact with the api.
      */
     public TwitterViewModel(@NonNull Application application) {
         super(application);
@@ -46,6 +45,8 @@ public class TwitterViewModel extends AndroidViewModel implements TwitterReposit
         return mObservableSearchResults;
     }
 
+    //We need a way to receive the results to update the livedata.
+    //Better solution would be to implement the database to trigger updates when data is saved.
     @Override
     public void onSearchResultReceived(List<Tweet> response) {
         mProcessing.setValue(false);
