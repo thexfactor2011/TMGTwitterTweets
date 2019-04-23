@@ -11,13 +11,13 @@ import java.util.List;
 public class SearchResponse {
     @SerializedName("statuses")
     @Expose
-    private List<Status> statuses = null;
+    private List<Tweets> tweets = null;
 
-    public List<Status> getStatuses() {
-        return statuses;
+    public List<Tweets> getTweets() {
+        return tweets;
     }
 
-    public void setStatuses(List<Status> statuses) {
-        this.statuses = statuses;
+    public void setStatuses(List<Tweets> tweets) {
+        this.tweets = tweets;
     }
 }
